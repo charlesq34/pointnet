@@ -5,7 +5,8 @@ Date: November 2016
 """
 
 import sys
-sys.path.append('./third_party')
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(BASE_DIR)
 
 # Draw point cloud
 from eulerangles import *
@@ -13,7 +14,6 @@ from eulerangles import *
 # Point cloud IO
 import numpy as np
 from plyfile import PlyData, PlyElement
-
 
  
 # ----------------------------------------

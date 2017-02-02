@@ -5,7 +5,7 @@ import sys
 import os
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(BASE_DIR)
-sys.path.append(os.path.dirname(BASE_DIR))
+sys.path.append(os.path.join(BASE_DIR, '../utils'))
 import tf_util
 from transform_nets import *
 
@@ -32,7 +32,7 @@ def get_model(point_cloud, is_training, bn_decay=None):
                          padding='VALID', stride=[1,1],
                          bn=True, is_training=is_training,
                          scope='conv2', bn_decay=bn_decay)
-    point_feat = tf.expand_dims(net_transformed, [2])
+    point_feat = net
     print point_feat
     net = tf_util.conv2d(point_feat, 64, [1,1],
                          padding='VALID', stride=[1,1],

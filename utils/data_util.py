@@ -1,18 +1,20 @@
+""" Utility functions for data loading and processing.
+"""
+
 import os
 import sys
-sys.path.append('third_party')
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(BASE_DIR)
 from plyfile import (PlyData, PlyElement, make2d, PlyParseError, PlyProperty)
 import numpy as np
 import h5py
-
-BASE_DIR = './'
 
 SAMPLING_BIN = os.path.join(BASE_DIR, 'third_party/mesh_sampling/build/pcsample')
 
 SAMPLING_POINT_NUM = 2048
 SAMPLING_LEAF_SIZE = 0.005
 
-MODELNET40_PATH = 'datasets/modelnet40'
+MODELNET40_PATH = '../datasets/modelnet40'
 
 def export_ply(pc, filename):
 	vertex = np.zeros(pc.shape[0], dtype=[('x', 'f4'), ('y', 'f4'), ('z', 'f4')])

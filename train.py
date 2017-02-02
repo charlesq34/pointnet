@@ -4,13 +4,15 @@ import h5py
 import numpy as np
 import tensorflow as tf
 import socket
+import importlib
 import os
-import tf_util
-from data_util import *
 import sys
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(BASE_DIR)
 sys.path.append(os.path.join(BASE_DIR, 'models'))
-import importlib
+sys.path.append(os.path.join(BASE_DIR, 'utils'))
+from data_util import *
+import tf_util
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--gpu', type=int, default=0, help='GPU to use [default: GPU 0]')
@@ -59,9 +61,10 @@ BN_DECAY_CLIP = 0.99
 HOSTNAME = socket.gethostname()
 
 # ModelNet40 official train/test split
-TRAIN_FILES = getDataFiles('data/modelnet40_ply_hdf5_2048/train_files.txt')
-TEST_FILES = getDataFiles('data/modelnet40_ply_hdf5_2048/test_files.txt')
-
+TRAIN_FILES = getDataFiles( \
+    os.path.join(BASE_DIR, 'data/modelnet40_ply_hdf5_2048/train_files.txt'))
+TEST_FILES = getDataFiles(\
+    os.path.join(BASE_DIR, 'data/modelnet40_ply_hdf5_2048/test_files.txt'))
 
 def log_string(out_str):
     LOG_FOUT.write(out_str+'\n')

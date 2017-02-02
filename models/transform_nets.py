@@ -4,7 +4,7 @@ import sys
 import os
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(BASE_DIR)
-sys.path.append(os.path.dirname(BASE_DIR))
+sys.path.append(os.path.join(BASE_DIR, '../utils'))
 import tf_util
 
 def input_transform_net(point_cloud, is_training, bn_decay=None, K=3):
