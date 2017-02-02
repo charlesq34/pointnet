@@ -474,12 +474,17 @@ def batch_norm_template(inputs, is_training, scope, moments_dims, bn_decay):
     batch_mean, batch_var = tf.nn.moments(inputs, moments_dims, name='moments')
     decay = bn_decay if bn_decay is not None else 0.9
     ema = tf.train.ExponentialMovingAverage(decay=decay)
-    ema_apply_op = ema.apply([batch_mean, batch_var])
-
+    # Operator that maintains moving averages of variables.
+    ema_apply_op = tf.cond(is_training,
+                           lambda: ema.apply([batch_mean, batch_var]),
+                           lambda: tf.no_op())
+    
+    # Update moving average and return current batch's avg and var.
     def mean_var_with_update():
       with tf.control_dependencies([ema_apply_op]):
         return tf.identity(batch_mean), tf.identity(batch_var)
-
+    
+    # ema.average returns the Variable holding the average of var.
     mean, var = tf.cond(is_training,
                         mean_var_with_update,
                         lambda: (ema.average(batch_mean), ema.average(batch_var)))

@@ -31,7 +31,6 @@ FLAGS = parser.parse_args()
 BATCH_SIZE = FLAGS.batch_size
 NUM_POINT = FLAGS.num_point
 MAX_EPOCH = FLAGS.max_epoch
-NUM_POINT = FLAGS.num_point
 BASE_LEARNING_RATE = FLAGS.learning_rate
 GPU_INDEX = FLAGS.gpu
 MOMENTUM = FLAGS.momentum
@@ -140,7 +139,10 @@ def train():
 
         # Init variables
         init = tf.global_variables_initializer()
-        sess.run(init)
+        # To fix the bug introduced in TF 0.12.1 as in
+        # http://stackoverflow.com/questions/41543774/invalidargumenterror-for-tensor-bool-tensorflow-0-12-1
+        #sess.run(init)
+        sess.run(init, {is_training_pl: True})
 
         ops = {'pointclouds_pl': pointclouds_pl,
                'labels_pl': labels_pl,
