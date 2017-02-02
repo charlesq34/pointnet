@@ -7,7 +7,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(BASE_DIR)
 sys.path.append(os.path.join(BASE_DIR, '../utils'))
 import tf_util
-from transform_nets import *
+from transform_nets import input_transform_net, feature_transform_net
 
 def placeholder_inputs(batch_size, num_point):
     pointclouds_pl = tf.placeholder(tf.float32, shape=(batch_size, num_point, 3))
@@ -63,7 +63,7 @@ def get_model(point_cloud, is_training, bn_decay=None):
                                   scope='fc1', bn_decay=bn_decay)
     net = tf_util.fully_connected(net, 256, bn=True, is_training=is_training,
                                   scope='fc2', bn_decay=bn_decay)
-    net = tf_util.dropout(net, keep_prob=0.7, is_training=is_training,
+    net = tf_util.dropout(net, keep_prob=0.5, is_training=is_training,
                           scope='dp1')
     net = tf_util.fully_connected(net, 40, activation_fn=None, scope='fc3')
 

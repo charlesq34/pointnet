@@ -11,7 +11,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(BASE_DIR)
 sys.path.append(os.path.join(BASE_DIR, 'models'))
 sys.path.append(os.path.join(BASE_DIR, 'utils'))
-from data_util import *
+import data_util
 import tf_util
 
 parser = argparse.ArgumentParser()
@@ -61,9 +61,9 @@ BN_DECAY_CLIP = 0.99
 HOSTNAME = socket.gethostname()
 
 # ModelNet40 official train/test split
-TRAIN_FILES = getDataFiles( \
+TRAIN_FILES = data_util.getDataFiles( \
     os.path.join(BASE_DIR, 'data/modelnet40_ply_hdf5_2048/train_files.txt'))
-TEST_FILES = getDataFiles(\
+TEST_FILES = data_util.getDataFiles(\
     os.path.join(BASE_DIR, 'data/modelnet40_ply_hdf5_2048/test_files.txt'))
 
 def log_string(out_str):
@@ -180,9 +180,9 @@ def train_one_epoch(sess, ops, train_writer):
     
     for fn in range(len(TRAIN_FILES)):
         log_string('----' + str(fn) + '-----')
-        current_data, current_label = loadDataFile(TRAIN_FILES[train_file_idxs[fn]])
+        current_data, current_label = data_util.loadDataFile(TRAIN_FILES[train_file_idxs[fn]])
         current_data = current_data[:,0:NUM_POINT,:]
-        current_data, current_label, _ = shuffle_data(current_data, np.squeeze(current_label))            
+        current_data, current_label, _ = data_util.shuffle_data(current_data, np.squeeze(current_label))            
         current_label = np.squeeze(current_label)
         
         file_size = current_data.shape[0]
@@ -197,8 +197,8 @@ def train_one_epoch(sess, ops, train_writer):
             end_idx = (batch_idx+1) * BATCH_SIZE
             
             # Augment batched point clouds by rotation and jittering
-            rotated_data = rotate_point_cloud(current_data[start_idx:end_idx, :, :])
-            jittered_data = jitter_point_cloud(rotated_data)
+            rotated_data = data_util.rotate_point_cloud(current_data[start_idx:end_idx, :, :])
+            jittered_data = data_util.jitter_point_cloud(rotated_data)
             if INPUT_DROPOUT_KEEP_PROB < 1:
                 jittered_data = point_cloud_dropout(jittered_data, INPUT_DROPOUT_KEEP_PROB)
             feed_dict = {ops['pointclouds_pl']: jittered_data,
@@ -228,7 +228,7 @@ def eval_one_epoch(sess, ops, test_writer):
     
     for fn in range(len(TEST_FILES)):
         log_string('----' + str(fn) + '-----')
-        current_data, current_label = loadDataFile(TEST_FILES[fn])
+        current_data, current_label = data_util.loadDataFile(TEST_FILES[fn])
         current_data = current_data[:,0:NUM_POINT,:]
         current_label = np.squeeze(current_label)
         
