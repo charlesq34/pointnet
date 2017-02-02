@@ -1,10 +1,17 @@
+""" Utility functions for processing point clouds.
+
+Author: Charles R. Qi, Hao Su
+Date: November 2016
+"""
+
+import sys
+sys.path.append('./third_party')
+
 # Draw point cloud
 from eulerangles import *
 
 # Point cloud IO
-import sys
 import numpy as np
-sys.path.append('../data_preparation')
 from plyfile import PlyData, PlyElement
 
 

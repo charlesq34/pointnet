@@ -1,4 +1,4 @@
-""" Utility wrapper functions for TensorFlow layers.
+""" Wrapper functions for TensorFlow layers.
 
 Author: Charles R. Qi
 Date: November 2016
@@ -474,9 +474,9 @@ def batch_norm_template(inputs, is_training, scope, moments_dims, bn_decay):
     batch_mean, batch_var = tf.nn.moments(inputs, moments_dims, name='moments')
     decay = bn_decay if bn_decay is not None else 0.9
     ema = tf.train.ExponentialMovingAverage(decay=decay)
+    ema_apply_op = ema.apply([batch_mean, batch_var])
 
     def mean_var_with_update():
-      ema_apply_op = ema.apply([batch_mean, batch_var])
       with tf.control_dependencies([ema_apply_op]):
         return tf.identity(batch_mean), tf.identity(batch_var)
 

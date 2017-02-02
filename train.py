@@ -7,15 +7,19 @@ import socket
 import os
 import tf_util
 from data_util import *
-from pointnet_cls import *
+import sys
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.join(BASE_DIR, 'models'))
+import importlib
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--gpu', type=int, default=0, help='GPU to use [default: GPU 0]')
+parser.add_argument('--model', default='pointnet_cls', help='Model name: pointnet_cls or pointnet_cls_basic [default: pointnet_cls]')
 parser.add_argument('--log_dir', default='log', help='Log dir [default: log]')
 parser.add_argument('--num_point', type=int, default=1024, help='Point Number [256/512/1024/2048] [default: 1024]')
 parser.add_argument('--max_epoch', type=int, default=250, help='Epoch to run [default: 100]')
 parser.add_argument('--batch_size', type=int, default=32, help='Batch Size during training [default: 32]')
-parser.add_argument('--learning_rate', type=float, default=0.001, help='Initial learning rate [default: 0.01]')
+parser.add_argument('--learning_rate', type=float, default=0.001, help='Initial learning rate [default: 0.001]')
 parser.add_argument('--momentum', type=float, default=0.9, help='Initial learning rate [default: 0.9]')
 parser.add_argument('--optimizer', default='adam', help='adam or momentum [default: adam]')
 parser.add_argument('--decay_step', type=int, default=200000, help='Decay step for lr decay [default: 50000]')
@@ -36,9 +40,11 @@ DECAY_STEP = FLAGS.decay_step
 DECAY_RATE = FLAGS.decay_rate
 INPUT_DROPOUT_KEEP_PROB = FLAGS.input_dropout_keep_prob
 
+MODEL = importlib.import_module(FLAGS.model) # import network module
+MODEL_FILE = os.path.join(BASE_DIR, 'models', FLAGS.model+'.py')
 LOG_DIR = FLAGS.log_dir
 if not os.path.exists(LOG_DIR): os.mkdir(LOG_DIR)
-os.system('cp model.py %s' % (LOG_DIR)) # bkp of model def
+os.system('cp %s %s' % (MODEL_FILE, LOG_DIR)) # bkp of model def
 os.system('cp train.py %s' % (LOG_DIR)) # bkp of train procedure
 LOG_FOUT = open(os.path.join(LOG_DIR, 'log_train.txt'), 'w')
 LOG_FOUT.write(str(FLAGS)+'\n')
@@ -54,12 +60,8 @@ BN_DECAY_CLIP = 0.99
 HOSTNAME = socket.gethostname()
 
 # ModelNet40 official train/test split
-if HOSTNAME == 'neo':
-    TRAIN_FILES = getDataFiles('/home/rqi/Projects/pointcloud/data/modelnet40_thea_normalized_ply_hdf5_2048/train_files.txt')
-    TEST_FILES = getDataFiles('/home/rqi/Projects/pointcloud/data/modelnet40_thea_normalized_ply_hdf5_2048/test_files.txt')
-elif 'oriong' in HOSTNAME:
-    TRAIN_FILES = getDataFiles('/orions3-zfs/projects/rqi/3dnn/data/modelnet40_ply_official_uniform_2048/train_files.txt')
-    TEST_FILES = getDataFiles('/orions3-zfs/projects/rqi/3dnn/data/modelnet40_ply_official_uniform_2048/test_files.txt')
+TRAIN_FILES = getDataFiles('data/modelnet40_ply_hdf5_2048/train_files.txt')
+TEST_FILES = getDataFiles('data/modelnet40_ply_hdf5_2048/test_files.txt')
 
 
 def log_string(out_str):
@@ -75,7 +77,7 @@ def get_learning_rate(batch):
                         DECAY_STEP,          # Decay step.
                         DECAY_RATE,          # Decay rate.
                         staircase=True)
-    learing_rate = tf.maximum(learning_rate, 0.00001) # CLIP THE LEARNING RATE!!
+    learing_rate = tf.maximum(learning_rate, 0.00001) # CLIP THE LEARNING RATE!
     return learning_rate        
 
 def get_bn_decay(batch):
@@ -91,27 +93,28 @@ def get_bn_decay(batch):
 def train():
     with tf.Graph().as_default():
         with tf.device('/gpu:'+str(GPU_INDEX)):
-            pointclouds_pl, labels_pl = placeholder_inputs(BATCH_SIZE, NUM_POINT)
+            pointclouds_pl, labels_pl = MODEL.placeholder_inputs(BATCH_SIZE, NUM_POINT)
             is_training_pl = tf.placeholder(tf.bool, shape=())
+            print is_training_pl
             
             # Note the global_step=batch parameter to minimize. 
             # That tells the optimizer to helpfully increment the 'batch' parameter for you every time it trains.
             batch = tf.Variable(0)
             bn_decay = get_bn_decay(batch)
-            tf.scalar_summary('bn_decay', bn_decay)
+            tf.summary.scalar('bn_decay', bn_decay)
 
             # Get model and loss 
-            pred, end_points = get_model(pointclouds_pl, is_training_pl, bn_decay=bn_decay)
-            loss = get_loss(pred, labels_pl, end_points)
-            tf.scalar_summary('loss', loss)
+            pred, end_points = MODEL.get_model(pointclouds_pl, is_training_pl, bn_decay=bn_decay)
+            loss = MODEL.get_loss(pred, labels_pl, end_points)
+            tf.summary.scalar('loss', loss)
 
             correct = tf.equal(tf.argmax(pred, 1), tf.to_int64(labels_pl))
             accuracy = tf.reduce_sum(tf.cast(correct, tf.float32)) / float(BATCH_SIZE)
-            tf.scalar_summary('accuracy', accuracy)
+            tf.summary.scalar('accuracy', accuracy)
 
             # Get training operator
             learning_rate = get_learning_rate(batch)
-            tf.scalar_summary('learning_rate', learning_rate)
+            tf.summary.scalar('learning_rate', learning_rate)
             if OPTIMIZER == 'momentum':
                 optimizer = tf.train.MomentumOptimizer(learning_rate, momentum=MOMENTUM)
             elif OPTIMIZER == 'adam':
@@ -125,17 +128,18 @@ def train():
         config = tf.ConfigProto()
         config.gpu_options.allow_growth = True
         config.allow_soft_placement = True
-        config.log_device_placement = True
+        config.log_device_placement = False
         sess = tf.Session(config=config)
 
         # Add summary writers
-        merged = tf.merge_all_summaries()
-        train_writer = tf.train.SummaryWriter(os.path.join(LOG_DIR, 'train'),
+        #merged = tf.merge_all_summaries()
+        merged = tf.summary.merge_all()
+        train_writer = tf.summary.FileWriter(os.path.join(LOG_DIR, 'train'),
                                   sess.graph)
-        test_writer = tf.train.SummaryWriter(os.path.join(LOG_DIR, 'test'))
+        test_writer = tf.summary.FileWriter(os.path.join(LOG_DIR, 'test'))
 
         # Init variables
-        init = tf.initialize_all_variables()
+        init = tf.global_variables_initializer()
         sess.run(init)
 
         ops = {'pointclouds_pl': pointclouds_pl,
@@ -195,8 +199,8 @@ def train_one_epoch(sess, ops, train_writer):
             feed_dict = {ops['pointclouds_pl']: jittered_data,
                          ops['labels_pl']: current_label[start_idx:end_idx],
                          ops['is_training_pl']: is_training,}
-            summary, step, _, loss_val, pred_val = sess.run([ops['merged'], ops['step'], ops['train_op'], ops['loss'], ops['pred']],
-                                             feed_dict=feed_dict)
+            summary, step, _, loss_val, pred_val = sess.run([ops['merged'], ops['step'],
+                ops['train_op'], ops['loss'], ops['pred']], feed_dict=feed_dict)
             train_writer.add_summary(summary, step)
             pred_val = np.argmax(pred_val, 1)
             correct = np.sum(pred_val == current_label[start_idx:end_idx])
@@ -233,9 +237,8 @@ def eval_one_epoch(sess, ops, test_writer):
             feed_dict = {ops['pointclouds_pl']: current_data[start_idx:end_idx, :, :],
                          ops['labels_pl']: current_label[start_idx:end_idx],
                          ops['is_training_pl']: is_training}
-            summary, step, loss_val, pred_val = sess.run([ops['merged'], ops['step'], ops['loss'], ops['pred']],
-                                          feed_dict=feed_dict)
-            #test_writer.add_summary(summary, step)
+            summary, step, loss_val, pred_val = sess.run([ops['merged'], ops['step'],
+                ops['loss'], ops['pred']], feed_dict=feed_dict)
             pred_val = np.argmax(pred_val, 1)
             correct = np.sum(pred_val == current_label[start_idx:end_idx])
             total_correct += correct
