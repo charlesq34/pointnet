@@ -8,7 +8,7 @@ sys.path.append(BASE_DIR)
 import numpy as np
 
 # Download dataset for point cloud classification
-DATA_DIR = os.path.join(BASE_DIR, '../data')
+DATA_DIR = os.path.join(BASE_DIR, 'data')
 if not os.path.exists(DATA_DIR):
     os.mkdir(DATA_DIR)
 if not os.path.exists(os.path.join(DATA_DIR, 'modelnet40_ply_hdf5_2048')):
