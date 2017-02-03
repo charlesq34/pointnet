@@ -1,4 +1,5 @@
-## PointNet: Deep Learning on Point Sets for 3D Classification and Segmentation
+#pointnet
+PointNet: Deep Learning on Point Sets for 3D Classification and Segmentation
 
 By <a href="http://web.stanford.edu/~rqi/" target="_blank">Charles R. Qi</a>, <a href="http://ai.stanford.edu/~haosu/" target="_blank">Hao Su</a>, <a href="http://www.cs.stanford.edu/~kaichun/" target="_blank">Kaichun Mo</a>, <a href="http://geometry.stanford.edu/member/guibas/" target="_blank">Leonidas J. Guibas</a> from Stanford University.
 
@@ -24,6 +25,8 @@ If you find our work useful in your research, please consider citing:
 ### Installation
 
 Install <a href="https://www.tensorflow.org/get_started/os_setup" target="_blank">TensorFlow</a>.
+
+You may also need to install h5py.
 
 The code has been tested with TensorFlow 0.12.1, CUDA 8.0 and cuDNN 5.1 on Ubuntu 14.04.
 

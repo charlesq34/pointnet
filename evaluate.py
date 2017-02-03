@@ -11,7 +11,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(BASE_DIR)
 sys.path.append(os.path.join(BASE_DIR, 'models'))
 sys.path.append(os.path.join(BASE_DIR, 'utils'))
-import data_util
+import provider
 import pc_util
 
 
@@ -43,9 +43,9 @@ SHAPE_NAMES = [line.rstrip() for line in \
 HOSTNAME = socket.gethostname()
 
 # ModelNet40 official train/test split
-TRAIN_FILES = data_util.getDataFiles( \
+TRAIN_FILES = provider.getDataFiles( \
     os.path.join(BASE_DIR, 'data/modelnet40_ply_hdf5_2048/train_files.txt'))
-TEST_FILES = data_util.getDataFiles(\
+TEST_FILES = provider.getDataFiles(\
     os.path.join(BASE_DIR, 'data/modelnet40_ply_hdf5_2048/test_files.txt'))
 
 def log_string(out_str):
@@ -98,7 +98,7 @@ def eval_one_epoch(sess, ops, num_votes=1, topk=1):
     fout = open(os.path.join(DUMP_DIR, 'pred_label.txt'), 'w')
     for fn in range(len(TEST_FILES)):
         log_string('----'+str(fn)+'----')
-        current_data, current_label = data_util.loadDataFile(TEST_FILES[fn])
+        current_data, current_label = provider.loadDataFile(TEST_FILES[fn])
         current_data = current_data[:,0:NUM_POINT,:]
         current_label = np.squeeze(current_label)
         print current_data.shape
@@ -117,7 +117,7 @@ def eval_one_epoch(sess, ops, num_votes=1, topk=1):
             batch_pred_sum = np.zeros((cur_batch_size, NUM_CLASSES)) # score for classes
             batch_pred_classes = np.zeros((cur_batch_size, NUM_CLASSES)) # 0/1 for classes
             for vote_idx in range(num_votes):
-                rotated_data = data_util.rotate_point_cloud_by_angle(current_data[start_idx:end_idx, :, :],
+                rotated_data = provider.rotate_point_cloud_by_angle(current_data[start_idx:end_idx, :, :],
                                                   vote_idx/float(num_votes) * np.pi * 2)
                 feed_dict = {ops['pointclouds_pl']: rotated_data,
                              ops['labels_pl']: current_label[start_idx:end_idx],
