@@ -26,7 +26,6 @@ parser.add_argument('--momentum', type=float, default=0.9, help='Initial learnin
 parser.add_argument('--optimizer', default='adam', help='adam or momentum [default: adam]')
 parser.add_argument('--decay_step', type=int, default=200000, help='Decay step for lr decay [default: 50000]')
 parser.add_argument('--decay_rate', type=float, default=0.5, help='Decay rate for lr decay [default: 0.8]')
-parser.add_argument('--input_dropout_keep_prob', type=float, default=1.0, help='Input dropout keep prob [default: 1.0]')
 FLAGS = parser.parse_args()
 
 
@@ -39,7 +38,6 @@ MOMENTUM = FLAGS.momentum
 OPTIMIZER = FLAGS.optimizer
 DECAY_STEP = FLAGS.decay_step
 DECAY_RATE = FLAGS.decay_rate
-INPUT_DROPOUT_KEEP_PROB = FLAGS.input_dropout_keep_prob
 
 MODEL = importlib.import_module(FLAGS.model) # import network module
 MODEL_FILE = os.path.join(BASE_DIR, 'models', FLAGS.model+'.py')
@@ -199,8 +197,6 @@ def train_one_epoch(sess, ops, train_writer):
             # Augment batched point clouds by rotation and jittering
             rotated_data = data_util.rotate_point_cloud(current_data[start_idx:end_idx, :, :])
             jittered_data = data_util.jitter_point_cloud(rotated_data)
-            if INPUT_DROPOUT_KEEP_PROB < 1:
-                jittered_data = point_cloud_dropout(jittered_data, INPUT_DROPOUT_KEEP_PROB)
             feed_dict = {ops['pointclouds_pl']: jittered_data,
                          ops['labels_pl']: current_label[start_idx:end_idx],
                          ops['is_training_pl']: is_training,}
