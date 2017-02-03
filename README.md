@@ -45,6 +45,8 @@ After the above training, we can evaluate the model and output some visualizatio
 
 Point clouds that are wrongly classified will be saved to `dump` folder in default. We visualize the point cloud by rendering it into three-view images.
 
+If you'd like to prepare your own data, you can refer to some helper functions in `utils/data_prep_util.py` for saving and loading HDF5 files.
+
 ### License
 Our code is released under MIT License (see LICENSE file for details).
 
