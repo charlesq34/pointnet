@@ -22,11 +22,7 @@ If you find our work useful in your research, please consider citing:
    
 ### Installation
 
-Install <a href="https://www.tensorflow.org/get_started/os_setup" target="_blank">TensorFlow</a>.
-
-You may also need to install h5py.
-
-The code has been tested with TensorFlow 0.12.1, CUDA 8.0 and cuDNN 5.1 on Ubuntu 14.04.
+Install <a href="https://www.tensorflow.org/get_started/os_setup" target="_blank">TensorFlow</a>. You may also need to install h5py. The code has been tested with TensorFlow 0.12.1, CUDA 8.0 and cuDNN 5.1 on Ubuntu 14.04.
 
 ### Usage
 To train a model to classify point clouds sampled from 3D shapes:
