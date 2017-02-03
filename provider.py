@@ -1,6 +1,7 @@
 import os
 import sys
 import numpy as np
+import h5py
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(BASE_DIR)
 
@@ -11,11 +12,9 @@ if not os.path.exists(DATA_DIR):
 if not os.path.exists(os.path.join(DATA_DIR, 'modelnet40_ply_hdf5_2048')):
     www = 'https://shapenet.cs.stanford.edu/media/modelnet40_ply_hdf5_2048.zip'
     zipfile = os.path.basename(www)
-    curdir = os.getcwd()
-    os.system('cd %s' % (DATA_DIR))
     os.system('wget %s; unzip %s' % (www, zipfile))
+    os.system('mv %s %s' % (zipfile[:-4], DATA_DIR))
     os.system('rm %s' % (zipfile))
-    os.system('cd %s' % (curdir))
 
 
 def shuffle_data(data, labels):
