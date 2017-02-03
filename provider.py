@@ -1,11 +1,8 @@
-""" Utility functions for data loading and processing.
-"""
-
 import os
 import sys
+import numpy as np
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(BASE_DIR)
-import numpy as np
 
 # Download dataset for point cloud classification
 DATA_DIR = os.path.join(BASE_DIR, 'data')
