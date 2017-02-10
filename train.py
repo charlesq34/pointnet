@@ -131,14 +131,20 @@ def train():
         config.log_device_placement = False
         sess = tf.Session(config=config)
 
+        # For running on TensorFlow 0.11 or lower, uncomment the following lines.
+        # merged = tf.merge_all_summaries()
+        # train_writer = tf.train.SummaryWriter(os.path.join(LOG_DIR, 'train'),
+        #                           sess.graph)
+        # test_writer = tf.train.SummaryWriter(os.path.join(LOG_DIR, 'test'))
+
         # Add summary writers
-        #merged = tf.merge_all_summaries()
         merged = tf.summary.merge_all()
         train_writer = tf.summary.FileWriter(os.path.join(LOG_DIR, 'train'),
                                   sess.graph)
         test_writer = tf.summary.FileWriter(os.path.join(LOG_DIR, 'test'))
 
         # Init variables
+        # init = tf.initialize_all_variables()
         init = tf.global_variables_initializer()
         # To fix the bug introduced in TF 0.12.1 as in
         # http://stackoverflow.com/questions/41543774/invalidargumenterror-for-tensor-bool-tensorflow-0-12-1
