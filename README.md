@@ -4,7 +4,7 @@ Deep neural networks that directly consume point cloud for 3D classification and
 ![prediction example](https://github.com/charlesq34/pointnet/blob/master/doc/teaser.png)
 
 ### Introduction
-This work is based on our [arXiv tech report](https://arxiv.org/abs/1612.00593), where we proposed a novel deep net architecture for point clouds (as unordered point sets).
+This work is based on our [arXiv tech report](https://arxiv.org/abs/1612.00593), where we proposed a novel deep net architecture for point clouds (as unordered point sets). You can also check our [project webpage](http://stanford.edu/~rqi/pointnet) for a deeper introduction.
 
 Point cloud is an important type of geometric data structure. Due to its irregular format, most researchers transform such data to regular 3D voxel grids or collections of images. This, however, renders data unnecessarily voluminous and causes issues. In this paper, we design a novel type of neural network that directly consumes point clouds, which well respects the permutation invariance of points in the input.  Our network, named PointNet, provides a unified architecture for applications ranging from object classification, part segmentation, to scene semantic parsing. Though simple, PointNet is highly efficient and effective.
 
