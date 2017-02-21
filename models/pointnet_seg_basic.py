@@ -57,20 +57,20 @@ def get_model(point_cloud, is_training, bn_decay=None):
                          padding='VALID', stride=[1,1],
                          bn=True, is_training=is_training,
                          scope='conv6', bn_decay=bn_decay)
-    net = tf_util.conv2d(point_feat, 256, [1,1],
+    net = tf_util.conv2d(net, 256, [1,1],
                          padding='VALID', stride=[1,1],
                          bn=True, is_training=is_training,
                          scope='conv7', bn_decay=bn_decay)
-    net = tf_util.conv2d(point_feat, 128, [1,1],
+    net = tf_util.conv2d(net, 128, [1,1],
                          padding='VALID', stride=[1,1],
                          bn=True, is_training=is_training,
                          scope='conv8', bn_decay=bn_decay)
-    net = tf_util.conv2d(point_feat, 128, [1,1],
+    net = tf_util.conv2d(net, 128, [1,1],
                          padding='VALID', stride=[1,1],
                          bn=True, is_training=is_training,
                          scope='conv9', bn_decay=bn_decay)
 
-    net = tf_util.conv2d(point_feat, 50, [1,1],
+    net = tf_util.conv2d(net, 50, [1,1],
                          padding='VALID', stride=[1,1], activation_fn=None,
                          scope='conv10')
     net = tf.squeeze(net, [2]) # BxNxC
