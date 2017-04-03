@@ -63,7 +63,7 @@ def get_model(point_cloud, is_training, bn_decay=None):
 def get_loss(pred, label, end_points):
     """ pred: B*NUM_CLASSES,
         label: B, """
-    loss = tf.nn.sparse_softmax_cross_entropy_with_logits(pred, label)
+    loss = tf.nn.sparse_softmax_cross_entropy_with_logits(logits=pred, labels=label)
     classify_loss = tf.reduce_mean(loss)
     tf.summary.scalar('classify loss', classify_loss)
     return classify_loss

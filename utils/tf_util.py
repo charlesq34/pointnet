@@ -44,7 +44,7 @@ def _variable_with_weight_decay(name, shape, stddev, wd, use_xavier=True):
     initializer = tf.truncated_normal_initializer(stddev=stddev)
   var = _variable_on_cpu(name, shape, initializer)
   if wd is not None:
-    weight_decay = tf.mul(tf.nn.l2_loss(var), wd, name='weight_loss')
+    weight_decay = tf.multiply(tf.nn.l2_loss(var), wd, name='weight_loss')
     tf.add_to_collection('losses', weight_decay)
   return var
 
@@ -313,7 +313,7 @@ def fully_connected(inputs,
                     scope,
                     use_xavier=True,
                     stddev=1e-3,
-                    weigth_decay=0.0,
+                    weight_decay=0.0,
                     activation_fn=tf.nn.relu,
                     bn=False,
                     bn_decay=None,
@@ -333,7 +333,7 @@ def fully_connected(inputs,
                                           shape=[num_input_units, num_outputs],
                                           use_xavier=use_xavier,
                                           stddev=stddev,
-                                          wd=weigth_decay)
+                                          wd=weight_decay)
     outputs = tf.matmul(inputs, weights)
     biases = _variable_on_cpu('biases', [num_outputs],
                              tf.constant_initializer(0.0))
