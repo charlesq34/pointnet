@@ -1,5 +1,5 @@
-#pointnet
-Deep neural networks that directly consume point cloud for 3D classification and segementation, implemented in TensorFlow.
+## PointNet: *Deep Learning on Point Sets for 3D Classification and Segmentation*
+Created by <a href="http://charlesrqi.com" target="_blank">Charles R. Qi</a>, <a href="http://ai.stanford.edu/~haosu/" target="_blank">Hao Su</a>, <a href="http://cs.stanford.edu/~kaichun/" target="_blank">Kaichun Mo</a>, <a href="http://geometry.stanford.edu/member/guibas/" target="_blank">Leonidas J. Guibas</a> from Stanford University.
 
 ![prediction example](https://github.com/charlesq34/pointnet/blob/master/doc/teaser.png)
 
