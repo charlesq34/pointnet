@@ -24,6 +24,8 @@ If you find our work useful in your research, please consider citing:
 
 Install <a href="https://www.tensorflow.org/get_started/os_setup" target="_blank">TensorFlow</a>. You may also need to install h5py. The code has been tested with TensorFlow 1.0.1, CUDA 8.0 and cuDNN 5.1 on Ubuntu 14.04.
 
+If you are using PyTorch, you can find a third-party pytorch implementation <a href="https://github.com/fxia22/pointnet.pytorch" target="_blank">here</a>.
+
 ### Usage
 To train a model to classify point clouds sampled from 3D shapes:
 
@@ -61,5 +63,4 @@ Then you can run `train.py` and `test.py` in the `part_seg` folder for training 
 Our code is released under MIT License (see LICENSE file for details).
 
 ### TODO
-
 Add test script for evaluation on OOS shape or point cloud data.
