@@ -94,8 +94,8 @@ def eval_one_epoch(sess, ops, room_path, out_data_label_filename, out_gt_label_f
     total_seen_class = [0 for _ in range(NUM_CLASSES)]
     total_correct_class = [0 for _ in range(NUM_CLASSES)]
     if FLAGS.visu:
-        fout = open(os.path.join(DUMP_DIR, 'pred.obj'), 'w')
-        fout_gt = open(os.path.join(DUMP_DIR, 'gt.obj'), 'w')
+        fout = open(os.path.join(DUMP_DIR, os.path.basename(room_path)[:-4]+'_pred.obj'), 'w')
+        fout_gt = open(os.path.join(DUMP_DIR, os.path.basename(room_path)[:-4]+'_gt.obj'), 'w')
     fout_data_label = open(out_data_label_filename, 'w')
     fout_gt_label = open(out_gt_label_filename, 'w')
     
