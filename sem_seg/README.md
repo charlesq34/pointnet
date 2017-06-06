@@ -2,9 +2,11 @@
 
 ### Dataset
 
-- Donwload prepared HDF5 data for training: `sh download_data.sh`
+Donwload prepared HDF5 data for training:
 
-- Download 3D indoor parsing dataset (<a href="http://buildingparser.stanford.edu/dataset.html">S3DIS Dataset</a>) for testing and visualization. Version 1.2 of the dataset is used in this work.
+    sh download_data.sh
+
+(optional) Download 3D indoor parsing dataset (<a href="http://buildingparser.stanford.edu/dataset.html">S3DIS Dataset</a>) for testing and visualization. Version 1.2 of the dataset is used in this work.
 
 
 To prepare your own HDF5 data, you need to firstly download 3D indoor parsing dataset and then use `python collect_indoor3d_data.py` for data re-organization and `python gen_indoor3d_h5.py` to generate HDF5 files.
@@ -13,7 +15,9 @@ To prepare your own HDF5 data, you need to firstly download 3D indoor parsing da
 
 Once you have downloaded prepared HDF5 files or prepared them by yourself, to start training:
 
-    python train.py --log_dir log6
+    python train.py --log_dir log6 --test_area 6
+    
+In default a simple model based on vanilla PointNet is used for training. Area 6 is used for test set.
 
 ### Testing
 
