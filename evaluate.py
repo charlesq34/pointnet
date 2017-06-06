@@ -22,7 +22,7 @@ parser.add_argument('--batch_size', type=int, default=4, help='Batch Size during
 parser.add_argument('--num_point', type=int, default=1024, help='Point Number [256/512/1024/2048] [default: 1024]')
 parser.add_argument('--model_path', default='log/model.ckpt', help='model checkpoint file path [default: log/model.ckpt]')
 parser.add_argument('--dump_dir', default='dump', help='dump folder path [dump]')
-parser.add_argument('--visu', type=bool, default=False, help='Whether to dump image for error case [default: False]')
+parser.add_argument('--visu', action='store_true', help='Whether to dump image for error case [default: False]')
 FLAGS = parser.parse_args()
 
 

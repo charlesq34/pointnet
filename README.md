@@ -49,7 +49,7 @@ We can use TensorBoard to view the network architecture and monitor the training
 
 After the above training, we can evaluate the model and output some visualizations of the error cases.
 
-    python evaluate.py --visu True
+    python evaluate.py --visu
 
 Point clouds that are wrongly classified will be saved to `dump` folder in default. We visualize the point cloud by rendering it into three-view images.
 
