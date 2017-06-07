@@ -73,4 +73,4 @@ if __name__=='__main__':
     with tf.Graph().as_default():
         inputs = tf.zeros((32,1024,3))
         outputs = get_model(inputs, tf.constant(True))
-	print outputs
+        print(outputs)

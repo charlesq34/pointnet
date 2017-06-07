@@ -14,7 +14,7 @@ if not os.path.exists(output_folder):
 
 # Note: there is an extra character in the v1.2 data in Area_5/hallway_6. It's fixed manually.
 for anno_path in anno_paths:
-    print anno_path
+    print(anno_path)
     try:
         elements = anno_path.split('/')
         out_filename = elements[-3]+'_'+elements[-2]+'.npy' # Area_1_hallway_1.npy

@@ -95,7 +95,7 @@ def train():
         with tf.device('/gpu:'+str(GPU_INDEX)):
             pointclouds_pl, labels_pl = MODEL.placeholder_inputs(BATCH_SIZE, NUM_POINT)
             is_training_pl = tf.placeholder(tf.bool, shape=())
-            print is_training_pl
+            print(is_training_pl)
             
             # Note the global_step=batch parameter to minimize. 
             # That tells the optimizer to helpfully increment the 'batch' parameter for you every time it trains.
@@ -184,12 +184,12 @@ def train_one_epoch(sess, ops, train_writer):
         current_label = np.squeeze(current_label)
         
         file_size = current_data.shape[0]
-        num_batches = file_size / BATCH_SIZE
+        num_batches = file_size // BATCH_SIZE
         
         total_correct = 0
         total_seen = 0
         loss_sum = 0
-        
+       
         for batch_idx in range(num_batches):
             start_idx = batch_idx * BATCH_SIZE
             end_idx = (batch_idx+1) * BATCH_SIZE
@@ -229,7 +229,7 @@ def eval_one_epoch(sess, ops, test_writer):
         current_label = np.squeeze(current_label)
         
         file_size = current_data.shape[0]
-        num_batches = file_size / BATCH_SIZE
+        num_batches = file_size // BATCH_SIZE
         
         for batch_idx in range(num_batches):
             start_idx = batch_idx * BATCH_SIZE

@@ -39,7 +39,7 @@ def get_model(point_cloud, is_training, bn_decay=None):
     pc_feat1 = tf.reshape(pc_feat1, [batch_size, -1])
     pc_feat1 = tf_util.fully_connected(pc_feat1, 256, bn=True, is_training=is_training, scope='fc1', bn_decay=bn_decay)
     pc_feat1 = tf_util.fully_connected(pc_feat1, 128, bn=True, is_training=is_training, scope='fc2', bn_decay=bn_decay)
-    print pc_feat1
+    print(pc_feat1)
    
     # CONCAT 
     pc_feat1_expand = tf.tile(tf.reshape(pc_feat1, [batch_size, 1, 1, -1]), [1, num_point, 1, 1])
@@ -72,6 +72,6 @@ if __name__ == "__main__":
             sess.run(init)
             start = time.time()
             for i in range(100):
-                print i
+                print(i)
                 sess.run(net, feed_dict={a:np.random.rand(32,4096,9)})
-            print time.time() - start
+            print(time.time() - start)

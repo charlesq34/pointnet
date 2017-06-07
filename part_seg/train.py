@@ -45,9 +45,9 @@ all_cats = json.load(open(os.path.join(hdf5_data_dir, 'overallid_to_catid_partid
 NUM_CATEGORIES = 16
 NUM_PART_CATS = len(all_cats)
 
-print '#### Batch Size: ', batch_size
-print '#### Point Number: ', point_num
-print '#### Training using GPU: %d' % FLAGS.gpu
+print('#### Batch Size: {0}'.format(batch_size))
+print('#### Point Number: {0}'.format(point_num))
+print('#### Training using GPU: {0}'.format(FLAGS.gpu))
 
 DECAY_STEP = 16881 * 20
 DECAY_RATE = 0.5
@@ -80,7 +80,7 @@ if not os.path.exists(SUMMARIES_FOLDER):
     os.mkdir(SUMMARIES_FOLDER)
 
 def printout(flog, data):
-	print data
+	print(data)
 	flog.write(data + '\n')
 
 def placeholder_inputs():

@@ -9,11 +9,11 @@ gt_classes = [0 for _ in range(13)]
 positive_classes = [0 for _ in range(13)]
 true_positive_classes = [0 for _ in range(13)]
 for i in range(num_room):
-    print i
+    print(i)
     data_label = np.loadtxt(pred_data_label_filenames[i])
     pred_label = data_label[:,-1]
     gt_label = np.loadtxt(gt_label_filenames[i])
-    print gt_label.shape
+    print(gt_label.shape)
     for j in xrange(gt_label.shape[0]):
         gt_l = int(gt_label[j])
         pred_l = int(pred_label[j])
@@ -22,18 +22,18 @@ for i in range(num_room):
         true_positive_classes[gt_l] += int(gt_l==pred_l)
 
 
-print gt_classes
-print positive_classes
-print true_positive_classes
+print(gt_classes)
+print(positive_classes)
+print(true_positive_classes)
 
 
-print 'Overall accuracy: ', sum(true_positive_classes)/float(sum(positive_classes))
+print('Overall accuracy: {0}'.format(sum(true_positive_classes)/float(sum(positive_classes))))
 
 print 'IoU:'
 iou_list = []
 for i in range(13):
     iou = true_positive_classes[i]/float(gt_classes[i]+positive_classes[i]-true_positive_classes[i]) 
-    print iou
+    print(iou)
     iou_list.append(iou)
 
-print sum(iou_list)/13.0
+print(sum(iou_list)/13.0)
