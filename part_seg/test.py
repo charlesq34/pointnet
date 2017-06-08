@@ -55,7 +55,7 @@ NUM_PART_CATS = 50
 cpid2oid = json.load(open(os.path.join(hdf5_data_dir, 'catid_partid_to_overallid.json'), 'r'))
 
 def printout(flog, data):
-	print data
+	print(data)
 	flog.write(data + '\n')
 
 def output_color_point_cloud(data, seg, out_file):

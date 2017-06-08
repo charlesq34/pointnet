@@ -110,7 +110,7 @@ def eval_one_epoch(sess, ops, room_path, out_data_label_filename, out_gt_label_f
     max_room_z = max(data[:,2])
     
     file_size = current_data.shape[0]
-    num_batches = file_size / BATCH_SIZE
+    num_batches = file_size // BATCH_SIZE
     print(file_size)
 
     

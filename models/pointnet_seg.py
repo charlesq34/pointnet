@@ -42,7 +42,7 @@ def get_model(point_cloud, is_training, bn_decay=None):
     end_points['transform'] = transform
     net_transformed = tf.matmul(tf.squeeze(net), transform)
     point_feat = tf.expand_dims(net_transformed, [2])
-    print point_feat
+    print(point_feat)
 
     net = tf_util.conv2d(point_feat, 64, [1,1],
                          padding='VALID', stride=[1,1],
@@ -58,11 +58,11 @@ def get_model(point_cloud, is_training, bn_decay=None):
                          scope='conv5', bn_decay=bn_decay)
     global_feat = tf_util.max_pool2d(net, [num_point,1],
                                      padding='VALID', scope='maxpool')
-    print global_feat
+    print(global_feat)
 
     global_feat_expand = tf.tile(global_feat, [1, num_point, 1, 1])
     concat_feat = tf.concat(3, [point_feat, global_feat_expand])
-    print concat_feat
+    print(concat_feat)
 
     net = tf_util.conv2d(concat_feat, 512, [1,1],
                          padding='VALID', stride=[1,1],
@@ -111,4 +111,4 @@ if __name__=='__main__':
     with tf.Graph().as_default():
         inputs = tf.zeros((32,1024,3))
         outputs = get_model(inputs, tf.constant(True))
-        print outputs
+        print(outputs)

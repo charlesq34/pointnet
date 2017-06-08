@@ -56,7 +56,7 @@ def insert_batch(data, label, last_batch=False):
         # Save batch data and label to h5 file, reset buffer_size
         h5_filename =  output_filename_prefix + '_' + str(h5_index) + '.h5'
         data_prep_util.save_h5(h5_filename, h5_batch_data, h5_batch_label, data_dtype, label_dtype) 
-        print 'Stored %s with size %d' % (h5_filename, h5_batch_data.shape[0])
+        print('Stored {0} with size {1}'.format(h5_filename, h5_batch_data.shape[0]))
         h5_index += 1
         buffer_size = 0
         # recursive call
@@ -64,7 +64,7 @@ def insert_batch(data, label, last_batch=False):
     if last_batch and buffer_size > 0:
         h5_filename =  output_filename_prefix + '_' + str(h5_index) + '.h5'
         data_prep_util.save_h5(h5_filename, h5_batch_data[0:buffer_size, ...], h5_batch_label[0:buffer_size, ...], data_dtype, label_dtype)
-        print 'Stored %s with size %d' % (h5_filename, buffer_size)
+        print('Stored {0} with size {1}'.format(h5_filename, buffer_size))
         h5_index += 1
         buffer_size = 0
     return
@@ -72,10 +72,10 @@ def insert_batch(data, label, last_batch=False):
 
 sample_cnt = 0
 for i, data_label_filename in enumerate(data_label_files):
-    print data_label_filename
+    print(data_label_filename)
     data, label = indoor3d_util.room2blocks_wrapper_normalized(data_label_filename, NUM_POINT, block_size=1.0, stride=0.5,
                                                  random_sample=False, sample_num=None)
-    print data.shape, label.shape
+    print('{0}, {1}'.format(data.shape, label.shape))
     for _ in range(data.shape[0]):
         fout_room.write(os.path.basename(data_label_filename)[0:-4]+'\n')
 
@@ -83,4 +83,4 @@ for i, data_label_filename in enumerate(data_label_files):
     insert_batch(data, label, i == len(data_label_files)-1)
 
 fout_room.close()
-print "Total samples: ", sample_cnt
+print("Total samples: {0}".format(sample_cnt))

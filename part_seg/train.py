@@ -45,9 +45,9 @@ all_cats = json.load(open(os.path.join(hdf5_data_dir, 'overallid_to_catid_partid
 NUM_CATEGORIES = 16
 NUM_PART_CATS = len(all_cats)
 
-print '#### Batch Size: ', batch_size
-print '#### Point Number: ', point_num
-print '#### Training using GPU: %d' % FLAGS.gpu
+print('#### Batch Size: {0}'.format(batch_size))
+print('#### Point Number: {0}'.format(point_num))
+print('#### Training using GPU: {0}'.format(FLAGS.gpu))
 
 DECAY_STEP = 16881 * 20
 DECAY_RATE = 0.5
@@ -62,7 +62,7 @@ BN_DECAY_CLIP = 0.99
 BASE_LEARNING_RATE = 0.001
 MOMENTUM = 0.9
 TRAINING_EPOCHES = FLAGS.epoch
-print '### Training epoch: ', TRAINING_EPOCHES
+print('### Training epoch: {0}'.format(TRAINING_EPOCHES))
 
 TRAINING_FILE_LIST = os.path.join(hdf5_data_dir, 'train_hdf5_file_list.txt')
 TESTING_FILE_LIST = os.path.join(hdf5_data_dir, 'val_hdf5_file_list.txt')
@@ -80,7 +80,7 @@ if not os.path.exists(SUMMARIES_FOLDER):
     os.mkdir(SUMMARIES_FOLDER)
 
 def printout(flog, data):
-	print data
+	print(data)
 	flog.write(data + '\n')
 
 def placeholder_inputs():
@@ -118,11 +118,11 @@ def train():
                       BN_DECAY_DECAY_STEP,
                       BN_DECAY_DECAY_RATE,
                       staircase=True)
-	    bn_decay = tf.minimum(BN_DECAY_CLIP, 1 - bn_momentum)
+            bn_decay = tf.minimum(BN_DECAY_CLIP, 1 - bn_momentum)
 
             lr_op = tf.summary.scalar('learning_rate', learning_rate)
             batch_op = tf.summary.scalar('batch_number', batch)
-	    bn_decay_op = tf.summary.scalar('bn_decay', bn_decay)
+            bn_decay_op = tf.summary.scalar('bn_decay', bn_decay)
  
             labels_pred, seg_pred, end_points = model.get_model(pointclouds_ph, input_label_ph, \
                     is_training=is_training_ph, bn_decay=bn_decay, cat_num=NUM_CATEGORIES, \
@@ -177,7 +177,7 @@ def train():
 
         config = tf.ConfigProto()
         config.gpu_options.allow_growth = True
-	config.allow_soft_placement = True
+        config.allow_soft_placement = True
         sess = tf.Session(config=config)
         
         init = tf.global_variables_initializer()
@@ -212,7 +212,7 @@ def train():
                 cur_labels_one_hot = convert_label_to_one_hot(cur_labels)
 
                 num_data = len(cur_labels)
-                num_batch = num_data / batch_size
+                num_batch = num_data // batch_size
 
                 total_loss = 0.0
                 total_label_loss = 0.0
@@ -302,7 +302,7 @@ def train():
                 cur_labels_one_hot = convert_label_to_one_hot(cur_labels)
 
                 num_data = len(cur_labels)
-                num_batch = num_data / batch_size
+                num_batch = num_data // batch_size
 
                 for j in range(num_batch):
                     begidx = j * batch_size

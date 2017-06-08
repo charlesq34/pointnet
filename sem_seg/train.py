@@ -201,7 +201,7 @@ def train_one_epoch(sess, ops, train_writer):
     current_data, current_label, _ = provider.shuffle_data(train_data[:,0:NUM_POINT,:], train_label) 
     
     file_size = current_data.shape[0]
-    num_batches = file_size / BATCH_SIZE
+    num_batches = file_size // BATCH_SIZE
     
     total_correct = 0
     total_seen = 0
@@ -243,7 +243,7 @@ def eval_one_epoch(sess, ops, test_writer):
     current_label = np.squeeze(test_label)
     
     file_size = current_data.shape[0]
-    num_batches = file_size / BATCH_SIZE
+    num_batches = file_size // BATCH_SIZE
     
     for batch_idx in range(num_batches):
         start_idx = batch_idx * BATCH_SIZE
