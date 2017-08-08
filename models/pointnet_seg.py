@@ -40,7 +40,7 @@ def get_model(point_cloud, is_training, bn_decay=None):
     with tf.variable_scope('transform_net2') as sc:
         transform = feature_transform_net(net, is_training, bn_decay, K=64)
     end_points['transform'] = transform
-    net_transformed = tf.matmul(tf.squeeze(net), transform)
+    net_transformed = tf.matmul(tf.squeeze(net, axis=[2]), transform)
     point_feat = tf.expand_dims(net_transformed, [2])
     print(point_feat)
 
