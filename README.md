@@ -92,3 +92,5 @@ Orginal Points
 
 Upper-bound Points
 ![image](https://raw.githubusercontent.com/Wind-Wing/readme_images/master/pointnet_visualization/14_upper_bound_points.jpg)
+
+For more details about visualization, please click this [link](https://github.com/Wind-Wing/pointnet/blob/master/visualization_report.pdf)
