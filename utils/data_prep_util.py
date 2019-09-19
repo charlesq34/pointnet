@@ -58,7 +58,7 @@ def batch_mkdir(output_folder, subdir_list):
 
 # Write numpy array data and label to h5_filename
 def save_h5_data_label_normal(h5_filename, data, label, normal, 
-		data_dtype='float32', label_dtype='uint8', noral_dtype='float32'):
+		data_dtype='float32', label_dtype='uint8', normal_dtype='float32'):
     h5_fout = h5py.File(h5_filename)
     h5_fout.create_dataset(
             'data', data=data,
