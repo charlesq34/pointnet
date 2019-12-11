@@ -99,7 +99,7 @@ def eval_one_epoch(sess, ops, room_path, out_data_label_filename, out_gt_label_f
     fout_data_label = open(out_data_label_filename, 'w')
     fout_gt_label = open(out_gt_label_filename, 'w')
     
-    current_data, current_label = indoor3d_util.room2blocks_wrapper_normalized(room_path, NUM_POINT)
+    current_data, current_label = indoor3d_util.room2samples_wrapper_normalized(room_path, NUM_POINT)
     current_data = current_data[:,0:NUM_POINT,:]
     current_label = np.squeeze(current_label)
     # Get room dimension..
