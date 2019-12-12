@@ -285,7 +285,7 @@ def room2samples(data, label, sample_num_point):
 
     batch_num = int(np.ceil(N / float(sample_num_point)))
     sample_datas = np.zeros((batch_num, sample_num_point, 6))
-    sample_labels = np.zeros((batch_num, sample_num_point, 1))
+    sample_labels = np.zeros((batch_num, sample_num_point, 1), dtype=np.uint8)
 
     for i in range(batch_num):
         beg_idx = i*sample_num_point
