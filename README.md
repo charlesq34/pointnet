@@ -75,3 +75,22 @@ Our code is released under MIT License (see LICENSE file for details).
 * <a href="https://arxiv.org/abs/1710.04954" target="_blank">PCPNET: Learning Local Shape Properties from Raw Point Clouds</a> by Guerrero et al. (arXiv). The work adapts PointNet for local geometric properties (e.g. normal and curvature) estimation in noisy point clouds.
 * <a href="https://arxiv.org/abs/1711.06396" target="_blank">VoxelNet: End-to-End Learning for Point Cloud Based 3D Object Detection</a> by Zhou et al. from Apple (arXiv) This work studies 3D object detection using LiDAR point clouds. It splits space into voxels, use PointNet to learn local voxel features and then use 3D CNN for region proposal, object classification and 3D bounding box estimation.
 * <a href="https://arxiv.org/abs/1711.08488" target="_blank">Frustum PointNets for 3D Object Detection from RGB-D Data</a> by Qi et al. (arXiv) A novel framework for 3D object detection with RGB-D data. The method proposed has achieved first place on KITTI 3D object detection benchmark on all categories (last checked on 11/30/2017).
+
+
+### visualization
+Realize abstracting and visualization critical points and upper-bound points from origial points cloud.
+To visualize those points, you need to run 
+
+	python3 visualize_points.py
+Here are some results
+
+Critical Points
+![image](https://raw.githubusercontent.com/Wind-Wing/readme_images/master/pointnet_visualization/14_critical_points.jpg)
+
+Orginal Points
+![image](https://raw.githubusercontent.com/Wind-Wing/readme_images/master/pointnet_visualization/14_orgin_points.jpg)
+
+Upper-bound Points
+![image](https://raw.githubusercontent.com/Wind-Wing/readme_images/master/pointnet_visualization/14_upper_bound_points.jpg)
+
+For more details about visualization, please click this [link](https://github.com/Wind-Wing/pointnet/blob/master/visualization_report.pdf)
