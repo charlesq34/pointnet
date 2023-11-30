@@ -11,8 +11,8 @@ def input_transform_net(point_cloud, is_training, bn_decay=None, K=3):
     """ Input (XYZ) Transform Net, input is BxNx3 gray image
         Return:
             Transformation matrix of size 3xK """
-    batch_size = point_cloud.get_shape()[0].value
-    num_point = point_cloud.get_shape()[1].value
+    batch_size = point_cloud.get_shape()[0]
+    num_point = point_cloud.get_shape()[1]
 
     input_image = tf.expand_dims(point_cloud, -1)
     net = tf_util.conv2d(input_image, 64, [1,3],
@@ -36,15 +36,15 @@ def input_transform_net(point_cloud, is_training, bn_decay=None, K=3):
     net = tf_util.fully_connected(net, 256, bn=True, is_training=is_training,
                                   scope='tfc2', bn_decay=bn_decay)
 
-    with tf.variable_scope('transform_XYZ') as sc:
+    with tf.compat.v1.variable_scope('transform_XYZ') as sc:
         assert(K==3)
-        weights = tf.get_variable('weights', [256, 3*K],
-                                  initializer=tf.constant_initializer(0.0),
+        weights = tf.compat.v1.get_variable('weights', [256, 3*K],
+                                  initializer=tf.compat.v1.constant_initializer(0.0),
                                   dtype=tf.float32)
-        biases = tf.get_variable('biases', [3*K],
-                                 initializer=tf.constant_initializer(0.0),
+        biases = tf.compat.v1.get_variable('biases', [3*K],
+                                 initializer=tf.compat.v1.constant_initializer(0.0),
                                  dtype=tf.float32)
-        biases += tf.constant([1,0,0,0,1,0,0,0,1], dtype=tf.float32)
+        biases = biases + tf.constant([1,0,0,0,1,0,0,0,1], dtype=tf.float32)
         transform = tf.matmul(net, weights)
         transform = tf.nn.bias_add(transform, biases)
 
@@ -56,8 +56,8 @@ def feature_transform_net(inputs, is_training, bn_decay=None, K=64):
     """ Feature Transform Net, input is BxNx1xK
         Return:
             Transformation matrix of size KxK """
-    batch_size = inputs.get_shape()[0].value
-    num_point = inputs.get_shape()[1].value
+    batch_size = inputs.get_shape()[0]
+    num_point = inputs.get_shape()[1]
 
     net = tf_util.conv2d(inputs, 64, [1,1],
                          padding='VALID', stride=[1,1],
@@ -80,14 +80,14 @@ def feature_transform_net(inputs, is_training, bn_decay=None, K=64):
     net = tf_util.fully_connected(net, 256, bn=True, is_training=is_training,
                                   scope='tfc2', bn_decay=bn_decay)
 
-    with tf.variable_scope('transform_feat') as sc:
-        weights = tf.get_variable('weights', [256, K*K],
-                                  initializer=tf.constant_initializer(0.0),
+    with tf.compat.v1.variable_scope('transform_feat') as sc:
+        weights = tf.compat.v1.get_variable('weights', [256, K*K],
+                                  initializer=tf.compat.v1.constant_initializer(0.0),
                                   dtype=tf.float32)
-        biases = tf.get_variable('biases', [K*K],
-                                 initializer=tf.constant_initializer(0.0),
+        biases = tf.compat.v1.get_variable('biases', [K*K],
+                                 initializer=tf.compat.v1.constant_initializer(0.0),
                                  dtype=tf.float32)
-        biases += tf.constant(np.eye(K).flatten(), dtype=tf.float32)
+        biases = biases + tf.constant(np.eye(K).flatten(), dtype=tf.float32)
         transform = tf.matmul(net, weights)
         transform = tf.nn.bias_add(transform, biases)
 

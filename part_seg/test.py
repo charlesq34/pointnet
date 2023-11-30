@@ -88,8 +88,8 @@ def pc_normalize(pc):
     return pc
 
 def placeholder_inputs():
-    pointclouds_ph = tf.placeholder(tf.float32, shape=(batch_size, point_num, 3))
-    input_label_ph = tf.placeholder(tf.float32, shape=(batch_size, NUM_OBJ_CATS))
+    pointclouds_ph = tf.compat.v1.placeholder(tf.float32, shape=(batch_size, point_num, 3))
+    input_label_ph = tf.compat.v1.placeholder(tf.float32, shape=(batch_size, NUM_OBJ_CATS))
     return pointclouds_ph, input_label_ph
 
 def output_color_point_cloud(data, seg, out_file):
@@ -128,7 +128,7 @@ def predict():
     
     with tf.device('/gpu:'+str(gpu_to_use)):
         pointclouds_ph, input_label_ph = placeholder_inputs()
-        is_training_ph = tf.placeholder(tf.bool, shape=())
+        is_training_ph = tf.compat.v1.placeholder(tf.bool, shape=())
 
         # simple model
         pred, seg_pred, end_points = model.get_model(pointclouds_ph, input_label_ph, \
@@ -136,16 +136,16 @@ def predict():
                 batch_size=batch_size, num_point=point_num, weight_decay=0.0, bn_decay=None)
         
     # Add ops to save and restore all the variables.
-    saver = tf.train.Saver()
+    saver = tf.compat.v1.train.Saver()
 
     # Later, launch the model, use the saver to restore variables from disk, and
     # do some work with the model.
     
-    config = tf.ConfigProto()
+    config = tf.compat.v1.ConfigProto()
     config.gpu_options.allow_growth = True
     config.allow_soft_placement = True
 
-    with tf.Session(config=config) as sess:
+    with tf.compat.v1.Session(config=config) as sess:
         if not os.path.exists(output_dir):
             os.mkdir(output_dir)
 
